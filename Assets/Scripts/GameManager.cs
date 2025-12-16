@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Networking;
+using System.Collections;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,8 +33,8 @@ public class GameManager : MonoBehaviour
 
     }
 #endif
-
-    public UI mainPageUI, gameUI, settingUI, storeUI, gameOverUI;
+    public AssetBundle ab;
+    public UI mainPageUI, gameUI, settingUI, storeUI, gameOverUI,levelSelectUI;
     public TimeUI timeUI;
     public AudioSource BGM;
     public Transform CoinNode;
@@ -49,12 +52,14 @@ public class GameManager : MonoBehaviour
         settingUI.HideUI();
         storeUI.HideUI();
         gameOverUI.HideUI();
+        levelSelectUI.HideUI();
     }
 
     private void Awake()
     {
         GameSet.instance.gameManager = this;
         GameSet.instance.SetGameConfig();
+        StartCoroutine(LoadAB());
     }
 
     private void Start()
@@ -65,15 +70,36 @@ public class GameManager : MonoBehaviour
         SetBGMState();
     }
 
-    public void DealLevel()
+    public void LevelInit()
     {
+        linesDrawer.gameObject.SetActive(true);
         CleanNode(LevelNode);
         CleanNode(linesDrawer.transform);
-        linesDrawer.currentLineCount= 0;
-        LevelConfig target = GameSet.instance.matter.GetLevelConfig(GameSet.instance.matter.allLevel[GameSet.instance.userData.Level].ID);
+        linesDrawer.currentLineCount = 0;
+    }
+
+    public void DealLevel()
+    {      
+        LevelConfig target = GameSet.instance.matter.GetLevelConfig(GameSet.instance.matter.allLevel[GameSet.instance.userData.Level-1].ID);
         nowLevel = Instantiate(ResourceManager.Instance.LoadRes<GameObject>(target.level_Url), LevelNode);
     }
 
+    IEnumerator LoadAB()
+    {
+        string abPath = Path.Combine(Application.streamingAssetsPath, "Package/data");
+        UnityWebRequest request = UnityWebRequest.Get(abPath);
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            byte[] byteData = request.downloadHandler.data;
+            Encypt.DealData(byteData);
+            ab = AssetBundle.LoadFromMemory(byteData);
+            if (ab != null)
+            {
+                Debug.Log("AB包加载成功！");
+            }
+        }
+    }
     public void ShowToast(string msg)
     {
         Instantiate(GameSet.instance.matter.toastUI, TopUINode).ShowUI(msg);
@@ -140,12 +166,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGame() {
-        HideAllUI();
-        linesDrawer.gameObject.SetActive(true);
+        HideAllUI();  
+        LevelInit();
         DealLevel();
-        //gameUI.ShowUI();
     }
-
 
     public void CleanNode(Transform node) {
         for (int i = 0; i < node.childCount; i++)
@@ -153,6 +177,4 @@ public class GameManager : MonoBehaviour
             Destroy(node.GetChild(i).gameObject);
         }
     }
-
-
 }

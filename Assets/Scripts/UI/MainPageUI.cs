@@ -27,4 +27,10 @@ public class MainPageUI : UI
         GameSet.instance.audioManager.PlayAudio(GameSet.instance.matter.BtnAudio);
         GameSet.instance.gameManager.StartGame();
     }
+
+    public void LevelClick()
+    {
+        GameSet.instance.audioManager.PlayAudio(GameSet.instance.matter.BtnAudio);
+        GameSet.instance.gameManager.levelSelectUI.ShowUI();
+    }
 }

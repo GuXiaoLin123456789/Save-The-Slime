@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
+using System.Collections;
+using UnityEngine.Networking;
 
 
 [Serializable]
@@ -50,7 +53,7 @@ public class UserData
     public int Coin = 0;//金币
 
 
-    public int Level = 0;//关卡
+    public int Level = 1;//关卡
 
 
     public int insertNum = 0;//看插屏的次数
@@ -119,7 +122,6 @@ public class GameSet
     public AudioManager audioManager;
     public Matter matter;
     public GameManager gameManager;
-    public AssetBundle ab;
 
     public UserData userData = new UserData();//玩家数据
     public Action ADDoneCall;
@@ -177,11 +179,6 @@ public class GameSet
 
         matter = Resources.Load<Matter>("config/Matter");
 
-        //TextAsset fileData = Resources.Load("Package/data", typeof(TextAsset)) as TextAsset;
-        //byte[] byteData = fileData.bytes;
-        //Encypt.DealData(byteData);//解密资源包
-        //ab = AssetBundle.LoadFromMemory(byteData);
-
         //if (matter.isDebug)
         //{
         //    SRDebug.Init();
@@ -220,8 +217,6 @@ public class GameSet
         //    }
         //});
     }
-
-
 
     //效验本地数据
     public void CheckUserData() {

@@ -41,10 +41,11 @@ public class GameOverUI : UI
         });
 
         GameSet.instance.gameManager.HideAllUI();
-        if (GameSet.instance.userData.Level<GameSet.instance.matter.allLevel.Count-1)
+        if (GameSet.instance.userData.Level < GameSet.instance.matter.allLevel.Count)
         {
             GameSet.instance.userData.Level++;
-        }        
+        }
+        GameSet.instance.gameManager.LevelInit();
         GameSet.instance.gameManager.DealLevel();
     }
 
@@ -52,6 +53,7 @@ public class GameOverUI : UI
     {
         GameSet.instance.audioManager.PlayAudio(GameSet.instance.matter.BtnAudio);
         GameSet.instance.gameManager.HideAllUI();
+        GameSet.instance.gameManager.LevelInit();
         GameSet.instance.gameManager.DealLevel();
     }
 }

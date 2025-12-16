@@ -8,18 +8,18 @@ public class BuildPackage : Editor
 {
     [MenuItem("Tools/BuildPackage")]
     public static void BuildAllAssets() {
-        BuildPipeline.BuildAssetBundles(Application.dataPath + "/Resources/Package", BuildAssetBundleOptions.None, BuildTarget.Android);
 
-        AssetBundleManifest allabs = BuildPipeline.BuildAssetBundles(Application.dataPath + "/Resources/Package", BuildAssetBundleOptions.None, BuildTarget.Android);
+        string outputPath = Path.Combine(Application.streamingAssetsPath, "Package");
+        AssetBundleManifest allabs = BuildPipeline.BuildAssetBundles(outputPath, BuildAssetBundleOptions.None, BuildTarget.Android);
 
         foreach (var ab in allabs.GetAllAssetBundles())
         {
-            var fileName = Path.Combine(Application.dataPath + "/Resources/Package", ab);
+            var fileName = Path.Combine(outputPath, ab);
 
             byte[] fileData = File.ReadAllBytes(fileName);
             Encypt.DealData(fileData);
             File.WriteAllBytes(fileName, fileData);
         }
-
+        AssetDatabase.Refresh();
     }
 }
