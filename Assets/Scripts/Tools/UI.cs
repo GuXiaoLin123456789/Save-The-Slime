@@ -57,7 +57,5 @@ public class UI : MonoBehaviour
             HideUI();
         });
 
-    }
-
-  
+    }  
 }

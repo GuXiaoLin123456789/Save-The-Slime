@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,12 +15,24 @@ public class LevelSelectUI : UI
     public override void ShowUI()
     {
         base.ShowUI();
+        Init();
+    }
+
+    public override void CloseMe()
+    {
+        base.CloseMe();
+        GameSet.instance.gameManager.HideAllUI();
+        GameSet.instance.gameManager.mainPageUI.ShowUI();
+    }
+
+    public void Init()
+    {
         GameSet.instance.gameManager.CleanNode(levelBtnParent);
         for (int i = 0; i < GameSet.instance.matter.allLevel.Count; i++)
         {
             GameObject levelBtn = Instantiate(levelBtnPrefab, levelBtnParent);
-            LevelButton levelButton =levelBtn.GetComponent<LevelButton>();
-            string levelNum = "1-" + (i+1);
+            LevelButton levelButton = levelBtn.GetComponent<LevelButton>();
+            string levelNum = "1-" + (i + 1);
             bool isLock = GameSet.instance.userData.Level > i ? false : true;
             levelButton.Init(levelNum, isLock);
             levelButton.nowLevelNum = i;

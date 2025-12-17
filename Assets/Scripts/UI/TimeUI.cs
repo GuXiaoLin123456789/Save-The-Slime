@@ -18,9 +18,11 @@ public class TimeUI: MonoBehaviour
     {
         maxTimes = times;
     }
-    private void Start()
+
+    public void InitTime()
     {
-        
+        Hide();
+        OnTimeEnd?.Invoke(this, EventArgs.Empty);
     }
     public void Show()
     {

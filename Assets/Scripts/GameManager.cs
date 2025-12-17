@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     }
 #endif
+
+    [HideInInspector]
     public AssetBundle ab;
     public UI mainPageUI, gameUI, settingUI, storeUI, gameOverUI,levelSelectUI;
     public TimeUI timeUI;
@@ -76,10 +78,12 @@ public class GameManager : MonoBehaviour
         CleanNode(LevelNode);
         CleanNode(linesDrawer.transform);
         linesDrawer.currentLineCount = 0;
+        gameUI.ShowUI();
     }
 
     public void DealLevel()
-    {      
+    {
+        
         LevelConfig target = GameSet.instance.matter.GetLevelConfig(GameSet.instance.matter.allLevel[GameSet.instance.userData.Level-1].ID);
         nowLevel = Instantiate(ResourceManager.Instance.LoadRes<GameObject>(target.level_Url), LevelNode);
     }

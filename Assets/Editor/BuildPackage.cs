@@ -10,7 +10,7 @@ public class BuildPackage : Editor
     public static void BuildAllAssets() {
 
         string outputPath = Path.Combine(Application.streamingAssetsPath, "Package");
-        AssetBundleManifest allabs = BuildPipeline.BuildAssetBundles(outputPath, BuildAssetBundleOptions.None, BuildTarget.Android);
+        AssetBundleManifest allabs = BuildPipeline.BuildAssetBundles(outputPath, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.Android);
 
         foreach (var ab in allabs.GetAllAssetBundles())
         {
